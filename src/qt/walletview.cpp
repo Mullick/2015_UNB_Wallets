@@ -15,6 +15,7 @@
 #include "optionsmodel.h"
 #include "transactionview.h"
 #include "overviewpage.h"
+#include "servicespage.h"
 #include "askpassphrasedialog.h"
 #include "ui_interface.h"
 
@@ -55,6 +56,8 @@ WalletView::WalletView(QWidget *parent, BitcoinGUI *_gui):
 
     sendCoinsPage = new SendCoinsDialog(gui);
 
+    servicesPage = new ServicesPage(gui);
+
     signVerifyMessageDialog = new SignVerifyMessageDialog(gui);
 
     addWidget(overviewPage);
@@ -62,6 +65,7 @@ WalletView::WalletView(QWidget *parent, BitcoinGUI *_gui):
     addWidget(addressBookPage);
     addWidget(receiveCoinsPage);
     addWidget(sendCoinsPage);
+    addWidget(servicesPage);
 
     // Clicking on a transaction on the overview page simply sends you to transaction history page
     connect(overviewPage, SIGNAL(transactionClicked(QModelIndex)), this, SLOT(gotoHistoryPage()));
@@ -177,6 +181,12 @@ void WalletView::gotoSendCoinsPage(QString addr)
 
     if (!addr.isEmpty())
         sendCoinsPage->setAddress(addr);
+}
+
+void WalletView::gotoServicesPage()
+{
+    gui->getServicesAction()->setChecked(true);
+    setCurrentWidget(servicesPage);
 }
 
 void WalletView::gotoSignMessageTab(QString addr)

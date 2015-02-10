@@ -9,8 +9,8 @@ SplashScreen::SplashScreen(const QPixmap &pixmap, Qt::WindowFlags f) :
     QSplashScreen(pixmap, f)
 {
     // set reference point, paddings
-    int paddingRight            = 50;
-    int paddingTop              = 50;
+    int paddingRight            = 180;
+    int paddingTop              = 30;
     int titleVersionVSpace      = 17;
     int titleCopyrightVSpace    = 40;
 
@@ -28,7 +28,7 @@ SplashScreen::SplashScreen(const QPixmap &pixmap, Qt::WindowFlags f) :
     QPixmap newPixmap = QPixmap(":/images/splash");
 
     QPainter pixPaint(&newPixmap);
-    pixPaint.setPen(QColor(100,100,100));
+    pixPaint.setPen(QColor(173,223,33));
 
     // check font size and drawing with
     pixPaint.setFont(QFont(font, 33*fontFactor));

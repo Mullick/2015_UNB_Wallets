@@ -34,6 +34,9 @@ public:
     int getNumConnections() const;
     int getNumBlocks() const;
     int getNumBlocksAtStartup();
+    
+    quint64 getTotalBytesRecv() const;
+    quint64 getTotalBytesSent() const;
 
     double getVerificationProgress() const;
     QDateTime getLastBlockDate() const;
@@ -73,6 +76,7 @@ private:
 signals:
     void numConnectionsChanged(int count);
     void numBlocksChanged(int count, int countOfPeers);
+    void bytesChanged(quint64 totalBytesIn, quint64 totalBytesOut);
     void alertsChanged(const QString &warnings);
 
     //! Asynchronous message notification

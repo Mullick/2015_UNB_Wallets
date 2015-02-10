@@ -425,7 +425,10 @@ void AddressCurrentlyConnected(const CService& addr)
 
 
 
-
+uint64 CNode::nTotalBytesRecv = 0;
+uint64 CNode::nTotalBytesSent = 0;
+CCriticalSection CNode::cs_totalBytesRecv;
+CCriticalSection CNode::cs_totalBytesSent;
 
 CNode* FindNode(const CNetAddr& ip)
 {
@@ -609,6 +612,8 @@ void CNode::copyStats(CNodeStats &stats)
     X(nServices);
     X(nLastSend);
     X(nLastRecv);
+    X(nSendBytes);
+    X(nRecvBytes);
     X(nTimeConnected);
     X(addrName);
     X(nVersion);
@@ -616,11 +621,33 @@ void CNode::copyStats(CNodeStats &stats)
     X(fInbound);
     X(nStartingHeight);
     X(nMisbehavior);
-    X(nSendBytes);
-    X(nRecvBytes);
     stats.fSyncNode = (this == pnodeSync);
 }
 #undef X
+
+void CNode::RecordBytesRecv(uint64_t bytes)
+{
+    LOCK(cs_totalBytesRecv);
+    nTotalBytesRecv += bytes;
+}
+
+void CNode::RecordBytesSent(uint64_t bytes)
+{
+    LOCK(cs_totalBytesSent);
+    nTotalBytesSent += bytes;
+}
+
+uint64_t CNode::GetTotalBytesRecv()
+{
+    LOCK(cs_totalBytesRecv);
+    return nTotalBytesRecv;
+}
+
+uint64_t CNode::GetTotalBytesSent()
+{
+    LOCK(cs_totalBytesSent);
+    return nTotalBytesSent;
+}
 
 // requires LOCK(cs_vRecvMsg)
 bool CNode::ReceiveMsgBytes(const char *pch, unsigned int nBytes)
@@ -715,6 +742,8 @@ void SocketSendData(CNode *pnode)
             pnode->nLastSend = GetTime();
             pnode->nSendBytes += nBytes;
             pnode->nSendOffset += nBytes;
+            pnode->RecordBytesSent(nBytes);
+
             if (pnode->nSendOffset == data.size()) {
                 pnode->nSendOffset = 0;
                 pnode->nSendSize -= data.size();
@@ -992,6 +1021,7 @@ void ThreadSocketHandler()
                                 pnode->CloseSocketDisconnect();
                             pnode->nLastRecv = GetTime();
                             pnode->nRecvBytes += nBytes;
+                            pnode->RecordBytesRecv(nBytes);
                         }
                         else if (nBytes == 0)
                         {
@@ -1191,7 +1221,9 @@ void MapPort(bool)
 // The first name is used as information source for addrman.
 // The second name should resolve to a list of seed addresses.
 static const char *strMainNetDNSSeed[][2] = {
-    {"bluematt.me", "coingen-seed.bluematt.me"},
+    {"ispace.co.uk", "seed.ispace.co.uk"},
+    {"multipool.us", "seed.multipool.us"},
+    {"198.24.142.136", "198.24.142.136"},
     {NULL, NULL}
 };
 
@@ -1246,7 +1278,8 @@ void ThreadDNSAddressSeed()
 
 unsigned int pnSeed[] =
 {
-    0x00000000
+    0x42ac0c50,
+    0x45ace5db,
 };
 
 void DumpAddresses()
