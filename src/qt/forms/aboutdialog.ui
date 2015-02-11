@@ -7,27 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>593</width>
-    <height>319</height>
+    <height>539</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>About Bitcoin</string>
+   <string>About UnbreakableCoin</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_2">
-   <item>
-    <widget class="QLabel" name="label_4">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="pixmap">
-      <pixmap resource="../bitcoin.qrc">:/images/about</pixmap>
-     </property>
-    </widget>
-   </item>
-   <item>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="1" rowspan="2" colspan="2">
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
       <spacer name="verticalSpacer_2">
@@ -50,7 +37,7 @@
           <cursorShape>IBeamCursor</cursorShape>
          </property>
          <property name="text">
-          <string>&lt;b&gt;Bitcoin&lt;/b&gt; version</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UnbreakableCoin&lt;/span&gt; version&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="textInteractionFlags">
           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -63,7 +50,7 @@
           <cursorShape>IBeamCursor</cursorShape>
          </property>
          <property name="text">
-          <string notr="true">0.3.666-beta</string>
+          <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;2.0-beta&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="textInteractionFlags">
           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -107,12 +94,7 @@
         <cursorShape>IBeamCursor</cursorShape>
        </property>
        <property name="text">
-        <string>
-This is experimental software.
-
-Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php.
-
-This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit (http://www.openssl.org/) and cryptographic software written by Eric Young (eay@cryptsoft.com) and UPnP software written by Thomas Bernard.</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;UnbreakableCoin UNB Windows Wallet - Version 2.0 &lt;/p&gt;&lt;p&gt;UnbreakableCoin is Copyright © 2009-2015 Unbreakable Crypto Products LLC.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;UnbreakableCoin is experimental software. &lt;/p&gt;&lt;p&gt;Distributed under the MIT/X11 software license, see the accompanying file COPYING or &lt;/p&gt;&lt;p&gt;http://www.opensource.org/licenses/mit-license.php.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;This product includes software developed by the OpenSSL Project for use in the OpenSSL &lt;/p&gt;&lt;p&gt;Toolkit (http://www.openssl.org/) and cryptographic software written by Eric Young &lt;/p&gt;&lt;p&gt;(eay@cryptsoft.com) and UPnP software written by Thomas Bernard. &lt;/p&gt;&lt;p&gt;&lt;br/&gt;UnbreakableCoin UNB Windows Wallet - Version 2.0 is based on the Netcoin wallet by MEEE, &lt;/p&gt;&lt;p&gt;re-designed by Jim Blasko, MEEE, and The Unbreakable Team. Coded and compiled by MEEE.&lt;/p&gt;&lt;p&gt;UnbreakableCoin UNB Windows Wallet - Verion 2.0 released for download at &lt;/p&gt;&lt;p&gt;http://www.unbreakablecoin.com/wallets/&lt;/p&gt;&lt;p&gt;&lt;br/&gt;For Information on UnbreakableCoin-UNB, &lt;/p&gt;&lt;p&gt;Call 1-406-CALLUNB or email Jim Blasko at admin@unbreakablecoin.com&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="wordWrap">
         <bool>true</bool>
@@ -146,6 +128,19 @@ This product includes software developed by the OpenSSL Project for use in the O
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="0" column="0" rowspan="2">
+    <widget class="QLabel" name="label_4">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="../bitcoin.qrc">:/images/about</pixmap>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

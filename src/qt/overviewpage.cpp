@@ -3,19 +3,36 @@
 
 #include "clientmodel.h"
 #include "walletmodel.h"
+#include "main.h"
+#include "init.h"
+#include "base58.h"
 #include "bitcoinunits.h"
+#include "wallet.h"
+#include "bitcoinrpc.h"
 #include "optionsmodel.h"
 #include "transactiontablemodel.h"
 #include "transactionfilterproxy.h"
 #include "guiutil.h"
+#include "bitcoinrpc.h"
 #include "guiconstants.h"
 
 #include <QAbstractItemDelegate>
 #include <QPainter>
+#include <QIcon>
+#include <QWidget>
+#include <QLabel>
+#include <QTimer>
+#include <QFrame>
+#include <sstream>
+#include <string>
 
 #define DECORATION_SIZE 64
 #define NUM_ITEMS 3
 
+using namespace json_spirit;
+extern CWallet* pwalletMain;
+extern int64_t nLastCoinStakeSearchInterval;
+double GetPoSKernelPS();
 class TxViewDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT
@@ -118,17 +135,15 @@ OverviewPage::OverviewPage(QWidget *parent) :
 
     // start with displaying the "out of sync" warnings
     showOutOfSyncWarning(true);
+
+    connect(ui->startButton, SIGNAL(pressed()), this, SLOT(updateStatistics()));
+
 }
 
 void OverviewPage::handleTransactionClicked(const QModelIndex &index)
 {
     if(filter)
         emit transactionClicked(filter->mapToSource(index));
-}
-
-OverviewPage::~OverviewPage()
-{
-    delete ui;
 }
 
 void OverviewPage::setBalance(qint64 balance, qint64 unconfirmedBalance, qint64 immatureBalance)
@@ -184,6 +199,9 @@ void OverviewPage::setWalletModel(WalletModel *model)
 
     // update the display unit, to not use the default ("UNB")
     updateDisplayUnit();
+
+    // update statistics
+    updateStatistics();
 }
 
 void OverviewPage::updateDisplayUnit()
@@ -210,4 +228,100 @@ void OverviewPage::showOutOfSyncWarning(bool fShow)
 {
     ui->labelWalletStatus->setVisible(fShow);
     ui->labelTransactionsStatus->setVisible(fShow);
+}
+
+void OverviewPage::updateStatistics()
+{
+    double pHardness = GetDifficulty();
+    double pHardness2 = GetDifficulty(GetLastBlockIndex(pindexBest));
+    int pPawrate = GetPoWMHashPS();
+    double pPawrate2 = 0.000;
+    int nHeight = pindexBest->nHeight;
+    double nSubsidy = GetBlockValue(nHeight, 0)/COIN;
+    int peers = this->modelStatistics->getNumConnections();
+    pPawrate2 = (double)pPawrate /1000000;
+    QString height = QString::number(nHeight);
+
+    {
+
+    }
+    QString subsidy = QString::number(nSubsidy, 'f', 6);
+    QString hardness = QString::number(pHardness, 'f', 6);
+    QString hardness2 = QString::number(pHardness2, 'f', 6);
+    QString pawrate = QString::number(pPawrate2, 'f', 3);
+    QString Qlpawrate = modelStatistics->getLastBlockDate().toString();
+
+    QString QPeers = QString::number(peers);
+
+    if(nHeight > heightPrevious)
+    {
+        ui->heightBox->setText("<b><font color=\"green\">" + height + "</font></b>");
+    } else {
+    ui->heightBox->setText(height);
+    }
+
+    if(nSubsidy < rewardPrevious)
+    {
+        ui->rewardBox->setText("<b><font color=\"red\">" + subsidy + "</font></b>");
+    } else {
+    ui->rewardBox->setText(subsidy);
+    }
+
+    if(pHardness > hardnessPrevious)
+    {
+        ui->diffBox->setText("<b><font color=\"green\">" + hardness + "</font></b>");
+    } else if(pHardness < hardnessPrevious) {
+        ui->diffBox->setText("<b><font color=\"red\">" + hardness + "</font></b>");
+    } else {
+        ui->diffBox->setText(hardness);
+    }
+
+    if(pPawrate2 > netPawratePrevious)
+    {
+        ui->pawrateBox->setText("<b><font color=\"green\">" + pawrate + " TH/s</font></b>");
+    } else if(pPawrate2 < netPawratePrevious) {
+        ui->pawrateBox->setText("<b><font color=\"red\">" + pawrate + " TH/s</font></b>");
+    } else {
+        ui->pawrateBox->setText(pawrate + " TH/s");
+    }
+
+    if(Qlpawrate != pawratePrevious)
+    {
+        ui->localBox->setText("<b><font color=\"green\">" + Qlpawrate + "</font></b>");
+    } else {
+    ui->localBox->setText(Qlpawrate);
+    }
+
+    if(peers > connectionPrevious)
+    {
+        ui->connectionBox->setText("<b><font color=\"green\">" + QPeers + "</font></b>");
+    } else if(peers < connectionPrevious) {
+        ui->connectionBox->setText("<b><font color=\"red\">" + QPeers + "</font></b>");
+    } else {
+        ui->connectionBox->setText(QPeers);
+    }
+    updatePrevious(nHeight, nSubsidy, pHardness, pHardness2, pPawrate2, Qlpawrate, peers);
+
+}
+
+void OverviewPage::updatePrevious(int nHeight, double nSubsidy, double pHardness, double pHardness2, double pPawrate2, QString Qlpawrate, int peers)
+{
+    heightPrevious = nHeight;
+    rewardPrevious = nSubsidy;
+    hardnessPrevious = pHardness;
+    hardnessPrevious2 = pHardness2;
+    netPawratePrevious = pPawrate2;
+    pawratePrevious = Qlpawrate;
+    connectionPrevious = peers;
+}
+
+void OverviewPage::setStatistics(ClientModel *modelStatistics)
+{
+    updateStatistics();
+    this->modelStatistics = modelStatistics;
+}
+
+OverviewPage::~OverviewPage()
+{
+    delete ui;
 }

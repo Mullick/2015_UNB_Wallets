@@ -89,7 +89,7 @@ static void InitMessage(const std::string &message)
 {
     if(splashref)
     {
-        splashref->showMessage(QString::fromStdString(message), Qt::AlignBottom|Qt::AlignHCenter, QColor(55,55,55));
+        splashref->showMessage(QString::fromStdString(message), Qt::AlignBottom|Qt::AlignHCenter, QColor(173,223,33));
         qApp->processEvents();
     }
     printf("init message: %s\n", message.c_str());
@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
     // Application identification (must be set before OptionsModel is initialized,
     // as it is used to locate QSettings)
     QApplication::setOrganizationName("Unbreakablecoin");
-    QApplication::setOrganizationDomain("coingen.io");
+    QApplication::setOrganizationDomain("unbreakablecoin.com");
     QApplication::setApplicationName("Unbreakablecoin-Qt");
 
     // ... then GUI settings:

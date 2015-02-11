@@ -95,6 +95,11 @@ void WalletFrame::gotoSendCoinsPage(QString addr)
     walletStack->gotoSendCoinsPage(addr);
 }
 
+void WalletFrame::gotoServicesPage()
+{
+    walletStack->gotoServicesPage();
+}
+
 void WalletFrame::gotoSignMessageTab(QString addr)
 {
     walletStack->gotoSignMessageTab(addr);

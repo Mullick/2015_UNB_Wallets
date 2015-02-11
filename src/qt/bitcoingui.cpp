@@ -45,6 +45,8 @@
 #include <QTimer>
 #include <QDragEnterEvent>
 #include <QUrl>
+#include <QTextStream>
+#include <QStyleFactory>
 #include <QMimeData>
 #include <QStyle>
 #include <QSettings>
@@ -78,6 +80,17 @@ BitcoinGUI::BitcoinGUI(QWidget *parent) :
     // Create wallet frame and make it the central widget
     walletFrame = new WalletFrame(this);
     setCentralWidget(walletFrame);
+
+    // TODO: Theme switching :)
+    QFile f(":qdarkstyle/style.qss");
+    if (f.exists())
+    {
+        f.open(QFile::ReadOnly | QFile::Text);
+        QTextStream ts(&f);
+        qApp->setStyleSheet(ts.readAll());
+    }
+    else
+        QApplication::setStyle(QStyleFactory::create("Fusion"));
 
     // Accept D&D of URIs
     setAcceptDrops(true);
@@ -196,6 +209,13 @@ void BitcoinGUI::createActions()
     addressBookAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
     tabGroup->addAction(addressBookAction);
 
+    servicesAction = new QAction(QIcon(":/icons/res/icons/services.png"), tr("&Services"), this);
+    servicesAction->setToolTip(tr("<html><head/><body><p><img src=:/toolTip/res/tooltips/servicesTooltip.png/></p></body></html>"));
+    servicesAction->setToolTip(servicesAction->statusTip());
+    servicesAction->setCheckable(true);
+    servicesAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
+    tabGroup->addAction(servicesAction);
+
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(gotoOverviewPage()));
     connect(sendCoinsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
@@ -206,12 +226,15 @@ void BitcoinGUI::createActions()
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
     connect(addressBookAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(addressBookAction, SIGNAL(triggered()), this, SLOT(gotoAddressBookPage()));
+    connect(servicesAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+    connect(servicesAction, SIGNAL(triggered()), this, SLOT(gotoServicesPage()));
+    
 
     quitAction = new QAction(QIcon(":/icons/quit"), tr("E&xit"), this);
     quitAction->setStatusTip(tr("Quit application"));
     quitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
     quitAction->setMenuRole(QAction::QuitRole);
-    aboutAction = new QAction(QIcon(":/icons/unbreakablecoin"), tr("&About Unbreakablecoin"), this);
+    aboutAction = new QAction(QIcon(":/icons/toolbar"), tr("&About Unbreakablecoin"), this);
     aboutAction->setStatusTip(tr("Show information about Unbreakablecoin"));
     aboutAction->setMenuRole(QAction::AboutRole);
     aboutQtAction = new QAction(QIcon(":/trolltech/qmessagebox/images/qtlogo-64.png"), tr("About &Qt"), this);
@@ -287,9 +310,10 @@ void BitcoinGUI::createToolBars()
     toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toolbar->addAction(overviewAction);
     toolbar->addAction(sendCoinsAction);
-    toolbar->addAction(receiveCoinsAction);
+    toolbar->addAction(receiveCoinsAction);    
     toolbar->addAction(historyAction);
     toolbar->addAction(addressBookAction);
+    toolbar->addAction(servicesAction);
 }
 
 void BitcoinGUI::setClientModel(ClientModel *clientModel)
@@ -390,6 +414,7 @@ void BitcoinGUI::createTrayIconMenu()
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(sendCoinsAction);
     trayIconMenu->addAction(receiveCoinsAction);
+    trayIconMenu->addAction(servicesAction);
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(signMessageAction);
     trayIconMenu->addAction(verifyMessageAction);
@@ -474,6 +499,11 @@ void BitcoinGUI::gotoReceiveCoinsPage()
 void BitcoinGUI::gotoSendCoinsPage(QString addr)
 {
     if (walletFrame) walletFrame->gotoSendCoinsPage(addr);
+}
+
+void BitcoinGUI::gotoServicesPage()
+{
+    if (walletFrame) walletFrame->gotoServicesPage();
 }
 
 void BitcoinGUI::gotoSignMessageTab(QString addr)

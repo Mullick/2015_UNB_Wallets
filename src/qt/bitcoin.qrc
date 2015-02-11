@@ -1,4 +1,4 @@
-<!DOCTYPE RCC><RCC version="1.0">
+<RCC>
     <qresource prefix="/icons">
         <file alias="bitcoin">res/icons/unbreakablecoin.png</file>
         <file alias="address-book">res/icons/address-book.png</file>
@@ -40,11 +40,38 @@
         <file alias="filesave">res/icons/filesave.png</file>
         <file alias="qrcode">res/icons/qrcode.png</file>
         <file alias="debugwindow">res/icons/debugwindow.png</file>
+        <file>res/icons/services.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="about">res/images/about.png</file>
         <file alias="splash">res/images/splash.png</file>
         <file alias="splash_testnet">res/images/splash_testnet.png</file>
+        <file>res/images/logo.png</file>
+        <file>res/images/exchanges/CryptsyNetBtcImg.png</file>
+        <file>res/images/stores/unbreakableAuction.png</file>
+        <file>res/images/stores/BTCmadison.png</file>
+        <file>res/images/stores/sighEdge.png</file>
+        <file>res/images/stores/cryptoTrends.png</file>
+        <file>res/images/stores/movementProductions.png</file>
+        <file>res/images/stores/bitcoinables.png</file>
+        <file>res/images/stores/allstarCrypto.png</file>
+        <file>res/images/stores/diversifiedSellers.png</file>
+        <file>res/images/stores/cartoons.png</file>
+        <file>res/images/headers/stores.png</file>
+        <file>res/images/headers/exchanges.png</file>
+        <file>res/images/stores/filmclipz.png</file>
+        <file>res/images/stores/cryptoluv.png</file>
+        <file>res/images/stores/escryptow.png</file>
+        <file>res/images/stores/UNBmerchandise.png</file>
+        <file>res/images/usefullinks/infosite.png</file>
+        <file>res/images/usefullinks/updates.png</file>
+        <file>res/images/usefullinks/twitter.png</file>
+        <file>res/images/headers/usefulLinks.png</file>
+        <file>res/images/usefullinks/miningPools.png</file>
+        <file>res/images/usefullinks/facebook.png</file>
+        <file>res/images/usefullinks/team.png</file>
+        <file>res/images/exchanges/exchanges.png</file>
+        <file>res/images/exchanges/marketCap.png</file>
     </qresource>
     <qresource prefix="/movies">
         <file alias="update_spinner">res/movies/update_spinner.mng</file>
@@ -98,4 +125,5 @@
         <file alias="zh_CN">locale/bitcoin_zh_CN.qm</file>
         <file alias="zh_TW">locale/bitcoin_zh_TW.qm</file>
     </qresource>
+    <qresource prefix="/"/>
 </RCC>

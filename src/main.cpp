@@ -1071,7 +1071,7 @@ uint256 static GetOrphanRoot(const CBlockHeader* pblock)
     return pblock->GetHash();
 }
 
-int64 static GetBlockValue(int nHeight, int64 nFees)
+int64 GetBlockValue(int nHeight, int64 nFees)
 {
     int64 nSubsidy = 50 * COIN;
 
@@ -1293,6 +1293,14 @@ bool ConnectBestBlock(CValidationState &state) {
             pindexTest = pindexTest->pprev;
         } while(true);
     } while(true);
+}
+
+// ppcoin: find last block index up to pindex
+const CBlockIndex* GetLastBlockIndex(const CBlockIndex* pindex)
+{
+    while (pindex && pindex->pprev && pindex)
+        pindex = pindex->pprev;
+    return pindex;
 }
 
 void CBlockHeader::UpdateTime(const CBlockIndex* pindexPrev)
