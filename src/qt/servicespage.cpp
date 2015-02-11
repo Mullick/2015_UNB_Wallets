@@ -54,11 +54,7 @@ int getBlockHashrate(int height)
     double timeDiff = getBlockTime(height) - getBlockTime(1);
     double timePerBlock = timeDiff / lookup;
 
-<<<<<<< HEAD
     return abs ((boost::int64_t)(((double)getBlockHardness(height) * pow(2.0, 32)) / timePerBlock));
-=======
-    return (boost::int64_t)(((double)getBlockHardness(height) * pow(2.0, 32)) / timePerBlock);
->>>>>>> origin/master
 }
 
 const CBlockIndex* getBlockIndex(int height)
@@ -377,11 +373,7 @@ void ServicesPage::updateExplorer(bool block)
         }
         int Pawrate = getBlockHashrate(height);
         double Pawrate2 = 0.000;
-<<<<<<< HEAD
         Pawrate2 = ((double)Pawrate / 30000000);
-=======
-        Pawrate2 = ((double)Pawrate / 1000000);
->>>>>>> origin/master
         std::string hash = getBlockHash(height);
         std::string merkle = getBlockMerkle(height);
         int nBits = getBlocknBits(height);
